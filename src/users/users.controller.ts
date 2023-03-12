@@ -15,7 +15,7 @@ import { User } from './entities/user.entity';
 @Controller('api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
+  // 유저 등록
   @Post()
   createUser(@Body() createDto: CreateUserDto): Promise<User> {
     return this.usersService.signUp(createDto);
