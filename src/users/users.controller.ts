@@ -6,11 +6,13 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/users')
 export class UsersController {
@@ -32,6 +34,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOneUser(id);
   }

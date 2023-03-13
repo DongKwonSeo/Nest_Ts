@@ -3,31 +3,24 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject('USER_REPOSITORY') private userRepository: Repository<User>,
   ) {
-    // 인증
     super({
-      secretOrKey: 'hello',
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: 'hello',
     });
   }
 
-  async validate(payload) {
-    const { name } = payload;
-    const user: User = await this.userRepository.findOne({
-      where: {
-        name,
-      },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return user;
-  }
+  // async validate(payload: any) {
+  //   const user = await this.authService.f;
+  //   if (!user) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   return user;
+  // }
 }

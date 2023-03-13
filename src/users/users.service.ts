@@ -39,6 +39,21 @@ export class UsersService {
       }
     }
   }
+  async validateUser(name: any) {
+    const user = await this.userRepository.findOne({
+      where: { name },
+    });
+    console.log(name, user);
+    if (!user) {
+      return null;
+    }
+    const result = await bcrypt.compare(password, user.password);
+    if (result) {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    }
+    return null;
+  }
 
   async siginIn(createDto: CreateUserDto): Promise<{ access_token: string }> {
     try {
@@ -67,7 +82,7 @@ export class UsersService {
 
   async findUserAll(): Promise<User[]> {
     return this.userRepository.find({
-      take: 5,
+      take: 100,
     });
   }
 
@@ -83,6 +98,7 @@ export class UsersService {
     }
     return user;
   }
+
   async update(id, updateaDto: UpdateUserDto): Promise<User> {
     const findUser = await this.userRepository.findOne({
       where: {
