@@ -9,6 +9,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject('USER_REPOSITORY') private userRepository: Repository<User>,
   ) {
+    // 인증
     super({
       secretOrKey: 'hello',
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
