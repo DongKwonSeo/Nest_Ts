@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
     DatabaseModule,
     JwtModule.register({
       secret: 'heelo',
-      signOptions: { expiresIn: '6000s' },
+      signOptions: { expiresIn: 60 * 60 },
     }),
   ],
   controllers: [UsersController],

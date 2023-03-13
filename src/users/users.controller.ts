@@ -23,7 +23,7 @@ export class UsersController {
 
   @Get()
   findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+    return this.usersService.findUserAll();
   }
 
   @Post('/login')

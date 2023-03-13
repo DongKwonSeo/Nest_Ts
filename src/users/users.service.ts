@@ -48,11 +48,14 @@ export class UsersService {
           name,
         },
       });
+      if (!checkId) {
+        throw new NotFoundException('해당 ID 존재하지 않습니다.');
+      }
       const hashPassword = await bcrypt.compare(password, checkId.password);
       const payload = { name };
       const access_token = await this.jwtService.sign(payload);
 
-      if (checkId && (await hashPassword)) {
+      if (checkId && hashPassword) {
         return { access_token };
       } else {
         throw new UnauthorizedException(false);
@@ -62,8 +65,10 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find({});
+  async findUserAll(): Promise<User[]> {
+    return this.userRepository.find({
+      take: 5,
+    });
   }
 
   async findOneUser(id): Promise<User> {
@@ -75,9 +80,8 @@ export class UsersService {
 
     if (!user) {
       throw new NotFoundException('해당 id의 게시글 정보는 존재하지 않습니다.');
-    } else {
-      return user;
     }
+    return user;
   }
   async update(id, updateaDto: UpdateUserDto): Promise<User> {
     const findUser = await this.userRepository.findOne({
